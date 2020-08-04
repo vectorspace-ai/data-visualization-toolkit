@@ -1,0 +1,3 @@
+class ScatterPlot:
+    def __init__(self):
+        ...

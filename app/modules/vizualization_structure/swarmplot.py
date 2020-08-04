@@ -1,0 +1,3 @@
+class SwarmPlot:
+    def __init__(self):
+        ...

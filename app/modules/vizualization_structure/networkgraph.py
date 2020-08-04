@@ -1,0 +1,3 @@
+class NetworkGraph:
+    def __init__(self):
+        ...
