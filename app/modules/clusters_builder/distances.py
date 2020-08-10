@@ -1,5 +1,9 @@
 import hdbscan
 
+"""
+Distances used in HDBSCAN clustering to perform the best clusters
+"""
+
 distances = {'braycurtis': hdbscan.dist_metrics.BrayCurtisDistance,
              'canberra': hdbscan.dist_metrics.CanberraDistance,
              'chebyshev': hdbscan.dist_metrics.ChebyshevDistance,

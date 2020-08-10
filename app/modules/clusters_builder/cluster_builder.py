@@ -2,11 +2,21 @@ import hdbscan
 from app.modules.clusters_builder.distances import distances
 from app.modules.metrics.metric import UnsupervisedMetrics
 
+
 class ClusterBuilder:
-    def __init__(self):
-        ...
+    """
+      A class used to build a Cluster
+    """
 
     def get_best_clusters(self, matrix):
+        """Compute clusters based on different distances and return the best one
+
+         :param matrix : Correlation matrix
+         :type list of lists
+         :return a list of ints representing the clusters
+         :rtype list of ints
+
+         """
         best_metric = -1
         best_clusters = []
         for dist in distances.keys():
@@ -19,7 +29,14 @@ class ClusterBuilder:
                 best_clusters = clustered.copy()
         return best_clusters
 
-
     def get_clusters(self, matrix):
+        """Return the best one cluster
+
+         :param matrix : Correlation matrix
+         :type list of lists
+         :return a list of ints representing the clusters
+         :rtype list of ints
+
+         """
         clusters = self.get_best_clusters(matrix)
         return clusters
