@@ -1,2 +1,5 @@
 datasets/get_rows.py
 test/
+data/
+.idea/
+__pycache__/
