@@ -1,306 +1,83 @@
-<!DOCTYPE html>
-<html>
-<input type="file" id="file"/>
-<style>
+{% include 'front.html' %}
 
-#file {
-    margin: auto;
-}
-
-#container-2 {
-    min-width: 320px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-.ld-label {
-        width:200px;
-        display: inline-block;
-}
-
-.ld-row {
-}
-
-.ld-url-input {
-        width: 500px;
-}
-
-.ld-time-input {
-        width: 40px;
-}
-
-#rcorners {
-  border-radius: 5px;
-  border: 1px solid #000000;
-  padding: 10px;
-  width: 600px;
-  height: 600px;
-  margin: auto;
-}
-
-</style>
-
-        <h1>Vectorspace Visualization Toolkit</h1>
-        <p>Once you've designed your cluster, choose your output file found in "output/cluster/" to view the generated cluster.</p>
-        <p>There are two kinds of plots available, "output_full" and "output" for your desired visualization.</p>
-
-        <div id="rcorners">
-            <div id="container-2"></div>
-        </div>
-
-<script src="https://d3js.org/d3.v3.js"></script>
-
-<link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css">
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/networkgraph.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-
+<div class="row" style="margin:50px 0">
+	<div class="col-md-12">
+		<form action="{{ url_for('visualize') }}" method="post">
+		<select style="height:50px" class=form-control id=dataset name="dataset">
+		<option value="0"  selected style="display:none">Select a dataset</option>
+		</select>
+		<select style="height:50px" class="form-control" id="root_node" name="root_node">
+		<option value="0" selected style="display:none">Root Symbol</option>
+		</select>
+		<select style="height:50px" class=form-control id="min_score" name="min_score">
+			<option value="0.0001" selected style="display:none">Min Relationship Strength</option>
+			<option value="0.5">0.5</option>
+			<option value="0.2">0.2</option>
+			<option value="0.1">0.1</option>
+			<option value="0.05">0.05</option>
+			<option value="0.02">0.02</option>
+			<option value="0.01">0.01</option>
+			<option value="0.001">0.001</option>
+			<option value="0.0001">0.0001</option>
+		</select>
+		<select style="height:50px" class=form-control id="max_depth" name="max_depth">
+			<option value="3"  selected style="display:none">Max Branch Depth</option>
+			<option value="3">3</option>
+			<option value="2">2</option>
+			<option value="1">1</option>
+		</select>
+		<select style="height:50px" class=form-control id="branches" name="branches">
+			<option value="0" selected style="display:none">Max Branches</option>
+			{% for i in range(1, 11) %}
+				<option value={{i}}>{{i}}</option>
+			{% endfor %} 
+			<option value="0">Max</option>
+		</select>
+		<select style="height:50px" class=form-control id="nodes" name="nodes">
+			<option value="50" selected style="display:none">Max Nodes</option>
+			{% for i in range(1, 51) %}
+				<option value={{i}}>{{i}}</option>
+			{% endfor %} 
+		</select>
+		<input type="submit" name="submit" id="submit" disabled value="Visualize Dataset" style="margin-top:50px">
+		</form>
+	</div>
+</div>
 <script>
+"use strict";
+const datasets = {{dataset | tojson }};
+let form = $('form');
+const dataset= $('select#dataset');
+let root_node = $('select#root_node');
+$('form').each(function() {
+	this.reset();
+});
+$(window).bind("pageshow", function() {
+	form[0].reset();
+	$("#root_node").find("option").remove().end().append('<option value="0" selected style="display:none">Root Node</option>').val("0");
+	$('#dataset').one('change', function() {
+   	$('#submit').prop('disabled', false);
+	});
 
-'use strict';
-/* global document */
-// Load the fonts
-Highcharts.createElement('link', {
-    href: 'https://fonts.googleapis.com/css?family=Unica+One',
-    rel: 'stylesheet',
-    type: 'text/css'
-}, null, document.getElementsByTagName('head')[0]);
+});
 
-Highcharts.theme = {
-    colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
-        '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
-    chart: {
-        backgroundColor: {
-            linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
-            stops: [
-                [0, '#2a2a2b'],
-                [1, '#3e3e40']
-            ]
-        },
-        style: {
-            fontFamily: '\'Unica One\', sans-serif'
-        },
-        plotBorderColor: '#606063'
-    },
-    title: {
-        style: {
-            color: '#E0E0E3',
-            textTransform: 'uppercase',
-            fontSize: '20px'
-        }
-    },
-    subtitle: {
-        style: {
-            color: '#E0E0E3',
-            textTransform: 'uppercase'
-        }
-    },
-    xAxis: {
-        gridLineColor: '#707073',
-        labels: {
-            style: {
-                color: '#E0E0E3'
-            }
-        },
-        lineColor: '#707073',
-        minorGridLineColor: '#505053',
-        tickColor: '#707073',
-        title: {
-            style: {
-                color: '#A0A0A3'
 
-            }
-        }
-    },
-    yAxis: {
-        gridLineColor: '#707073',
-        labels: {
-            style: {
-                color: '#E0E0E3'
-            }
-        },
-        lineColor: '#707073',
-        minorGridLineColor: '#505053',
-        tickColor: '#707073',
-        tickWidth: 1,
-        title: {
-            style: {
-                color: '#A0A0A3'
-            }
-        }
-    },
-    tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        style: {
-            color: '#F0F0F0'
-        }
-    },
-    plotOptions: {
-        series: {
-            dataLabels: {
-                color: '#B0B0B3'
-            },
-            marker: {
-                lineColor: '#333'
-            }
-        },
-        boxplot: {
-            fillColor: '#505053'
-        },
-        candlestick: {
-            lineColor: 'white'
-        },
-        errorbar: {
-            color: 'white'
-        }
-    },
-    legend: {
-        itemStyle: {
-            color: '#E0E0E3'
-        },
-        itemHoverStyle: {
-            color: '#FFF'
-        },
-        itemHiddenStyle: {
-            color: '#606063'
-        }
-    },
-    credits: {
-        style: {
-            color: '#666'
-        }
-    },
-    labels: {
-        style: {
-            color: '#707073'
-        }
-    },
-
-    drilldown: {
-        activeAxisLabelStyle: {
-            color: '#F0F0F3'
-        },
-        activeDataLabelStyle: {
-            color: '#F0F0F3'
-        }
-    },
-
-    navigation: {
-        buttonOptions: {
-            symbolStroke: '#DDDDDD',
-            theme: {
-                fill: '#505053'
-            }
-        }
-    },
-
-    // scroll charts
-    rangeSelector: {
-        buttonTheme: {
-            fill: '#505053',
-            stroke: '#000000',
-            style: {
-                color: '#CCC'
-            },
-            states: {
-                hover: {
-                    fill: '#707073',
-                    stroke: '#000000',
-                    style: {
-                        color: 'white'
-                    }
-                },
-                select: {
-                    fill: '#000003',
-                    stroke: '#000000',
-                    style: {
-                        color: 'white'
-                    }
-                }
-            }
-        },
-        inputBoxBorderColor: '#505053',
-        inputStyle: {
-            backgroundColor: '#333',
-            color: 'silver'
-        },
-        labelStyle: {
-            color: 'silver'
-        }
-    },
-
-    navigator: {
-        handles: {
-            backgroundColor: '#666',
-            borderColor: '#AAA'
-        },
-        outlineColor: '#CCC',
-        maskFill: 'rgba(255,255,255,0.1)',
-        series: {
-            color: '#7798BF',
-            lineColor: '#A6C7ED'
-        },
-        xAxis: {
-            gridLineColor: '#505053'
-        }
-    },
-
-    scrollbar: {
-        barBackgroundColor: '#808083',
-        barBorderColor: '#808083',
-        buttonArrowColor: '#CCC',
-        buttonBackgroundColor: '#606063',
-        buttonBorderColor: '#606063',
-        rifleColor: '#FFF',
-        trackBackgroundColor: '#404043',
-        trackBorderColor: '#404043'
-    },
-
-    // special colors for some of the
-    legendBackgroundColor: 'rgba(0, 0, 0, 0.5)',
-    background2: '#505053',
-    dataLabelsColor: '#B0B0B3',
-    textColor: '#C0C0C0',
-    contrastTextColor: '#F0F0F3',
-    maskColor: 'rgba(255,255,255,0.3)'
-};
-
-    function onChange(event) {
-        var reader = new FileReader();
-        reader.onload = onReaderLoad;
-        reader.readAsText(event.target.files[0]);
-    }
-
-function onReaderLoad(event){
-    var obj = JSON.parse(event.target.result);
-    Highcharts.chart('container-2', {
-        chart: {
-            type: 'networkgraph',
-            height: '100%'
-        },
-        title: {
-            text: 'Dataset Visualization Toolkit'
-        },
-        plotOptions: {
-            networkgraph: {
-                keys: ['from', 'to'],
-                layoutAlgorithm: {
-                    enableSimulation: true
-                }
-            }
-        },
-        series: [{
-            dataLabels: {
-                enabled: true
-            },
-            data: obj
-        }]
-    });
+for (var key in datasets) {
+	dataset.append($('<option/>', {'value': key, 'text': key}));
 }
-document.getElementById('file').addEventListener('change', onChange);
 
+dataset.change(function(ev) {
+root_node.empty();
+root_node.append($('<option/>'));
+
+	let root_nodes = datasets[dataset.val()];
+
+	for (var i in root_nodes) {
+		root_node.append($('<option/>', {'value': root_nodes[i], 'text': root_nodes[i]}));
+	}
+	$("#root_node").find("option:first").remove();
+});
 
 </script>
+
+{% include 'back.html' %}

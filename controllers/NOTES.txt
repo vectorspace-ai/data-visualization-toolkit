@@ -1,0 +1,6 @@
+for populating the drop down of labels for root node:
+
+1. select dataset
+2. add event listener that activates when a dataset is selecter
+3. when event is activated, parse the dataset for columns and rows, store each of them in arrays "rows" and "columns"
+4. depending on the value of "transpose_flag", populate the drop down with the array of
