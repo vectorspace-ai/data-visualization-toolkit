@@ -1,4 +1,5 @@
 '''Main API'''
+import webbrowser
 from os import path
 from flask import Flask
 from flask import jsonify
@@ -10,7 +11,8 @@ from modules.graph_network_processer import GraphNetwork
 EMPTY_GRAPH = "empty_graph"
 
 app = Flask(__name__)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
+webbrowser.open("127.0.0.1:4000", new=2)
 
 @app.route('/')
 def index():
@@ -31,7 +33,7 @@ def visualize():
 
     graph_network=GraphNetwork(root_node, max_depth, branches, nodes, min_score, transponse_flag, path.join(dataset_dir, dataset))
     graph=graph_network.pipeline()
-    print(graph)
+    #print(graph)
 
     if graph["data"]==EMPTY_GRAPH:
         return render_template('error.html')
@@ -42,3 +44,4 @@ def visualize():
 
 if __name__ == '__main__':
   app.run(host='127.0.0.1', port=4000)
+
