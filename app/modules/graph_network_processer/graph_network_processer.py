@@ -84,16 +84,20 @@ class GraphNetwork:
 
 	#incase dataset is a string for a file or is a file object
 	def open_csv(self):
+		"""if isinstance(dataset, str):
+			self.delim=self.check_filetype(dataset)
+			return open(dataset, 'r')"""
 		if isinstance(self.dataset, str):
-			with open(self.dataset) as file:
-				self.delim=self.check_filetype(self.dataset)
-				self.read_csv(file)
+			self.delim=self.check_filetype(self.dataset)
+			with open(self.dataset, 'r') as dataset:
+				with open(self.dataset, 'r') as t_dataset:
+					self.read_csv(dataset, t_dataset)
 		else:
 			self.delim=self.check_filetype(self.dataset.filename)
-			self.read_csv(io.TextIOWrapper(self.dataset))
+			self.read_csv(io.TextIOWrapper(self.dataset), io.TextIOWrapper(self.dataset))
 
 
-	def read_csv(self, dataset):
+	def read_csv(self, dataset, t_dataset):
 		#NAMING CONVENTION:
 		"""	-csv_reader: the ordinary csv.reader object for the dataset
 			-headers: the row/column labels of the dataset depending on trasnposing
@@ -109,11 +113,12 @@ class GraphNetwork:
 		if self.transponse_flag==1:
 			csv_reader=self.zipper(csv_reader)
 
+
+
+
 		#loads the labels into variables
 		self.headers = [i.strip(' ') for i in next(csv_reader)[1:] if i.strip()]
 		self.n_headers = self.headers[:]
-
-
 
 		for row in csv_reader:
 			temp=row[0].strip(' ')
@@ -126,13 +131,11 @@ class GraphNetwork:
 			self.t_headers=self.n_headers
 			self.t_data=self.n_data
 
-
 		else:
-			t_csv=self.zipper(csv_reader)
-			for row in t_csv:
+			t_csv=self.zipper(csv.reader(t_dataset, delimiter=self.delim))
+			for row in list(t_csv)[1:]:
 				temp=row[0].strip(' ')
 				self.t_data[temp] = [float(x) for x in row[1:]]
-
 	"""------------------------------------------------------------------------------------------------"""
 
 	#this function gets all the correlated symbols of the root symbol
@@ -164,7 +167,6 @@ class GraphNetwork:
 			else:
 				self.data=self.t_data.copy()
 				self.headers=self.t_headers[:]
-				what_is_header="transposed"
 
 
 
@@ -176,13 +178,11 @@ class GraphNetwork:
 					symbols.append(self.result[j]['cor_symbol'])
 			
 			temp[:]=[]
-			#print(what_is_header)
-			if 0==0:
-				for name in symbols:
-					#performs the same function as with the root symbol
-					temp[(len(temp)):]=self.get_intersected(name, self.headers, self.data, self.min_score, self.max_depth-remainer_depth+1)
-			"""except:
-				pass"""
+
+			for name in symbols:
+				#performs the same function as with the root symbol
+				temp[(len(temp)):]=self.get_intersected(name, self.headers, self.data, self.min_score, self.max_depth-remainer_depth+1)
+
 			remainer_depth-=1
 
 
