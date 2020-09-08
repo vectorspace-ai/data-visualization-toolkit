@@ -55,4 +55,4 @@ class PreprocessText:
         clean_tokens = self.remove_digits(clean_tokens)
         clean_tokens = self.remove_stop_words(clean_tokens)
         self.cleaned_tokens = clean_tokens
-        self.cleaned_text = [' '.join(x) for x in clean_tokens]
+        self.cleaned_text = [' '.join(x) for x in clean_tokens if x!=[]]

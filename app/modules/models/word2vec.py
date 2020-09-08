@@ -6,6 +6,8 @@ import numpy as np
 
 
 class Word2Vec(BaseModel):
+
+    ''' Word2Vec model class '''
     def __init__(
             self, *, path_to_model=None, model_filename=None, embeddings_shape=None, **kwargs,
     ):
@@ -28,7 +30,9 @@ class Word2Vec(BaseModel):
             return np.zeros(self.embeddings_shape)
 
     def fine_tune(self, cleaned_corpus):
+        ''' Fine-tuning the model on corpus and save to the mocked directory'''
+
         model = Word2Vec_gensim.load(join(self.path_to_model, self.model_filename))
-        model.build_vocab(cleaned_corpus, progress_per=10000)
+        model.build_vocab(cleaned_corpus, update=True)
         model.train(cleaned_corpus, total_examples=len(cleaned_corpus), epochs=30, report_delay=1)
-        model.save('data/models/word2vec_test/fine_tuned_word2vec111.model')
+        model.save('models/fine_tuned.model')
