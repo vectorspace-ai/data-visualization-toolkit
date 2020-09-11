@@ -3,6 +3,7 @@ import datetime
 import numpy as np
 import pandas as pd
 from os.path import join
+from scipy.spatial import distance 
 from enum import Enum
 
 
@@ -60,6 +61,7 @@ class CorrelationMatrix:
                     # print(self.pearson_correlation(label_vector, self.model.get_vector(context)))
             # this is executed if the context list is empty, thus only checking if the label is in the vocabulary
             else:
+                self.context_control=["none"]
                 if self.is_vector_in_model(label_vector):
                     remove_labels.append(label)
 
@@ -113,8 +115,8 @@ class CorrelationMatrix:
     def save_dataset(self, path_to_dataset, dataset_filename):
         df = self.get_dataset()
         filename_creted_name = self.distance + "_" + self.model.model_type[0] + "_" \
-                                  + dataset_filename + "_context_" + "_" + \
-                                  datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
+                                  + dataset_filename + "_context_" + "_".join(self.context_control) \
+                                  "_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
         self.path_to_dataset = join(path_to_dataset, filename_creted_name)
         df.to_csv(self.path_to_dataset)
         #
@@ -151,6 +153,7 @@ class CorrelationMatrix:
 
     # cosine similarity
     def cosine_similarity(self, x, y):
+
         return distance.cosine(x, y)
 
     # uncentered pearson
