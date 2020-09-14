@@ -3,6 +3,8 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 from app.modules.preprocess.stop_words_filtering import StopWords
 
 nltk.download('punkt')
+nltk.download('stopwords')
+
 
 import string
 import re
@@ -14,9 +16,10 @@ class PreprocessText:
         self.cleaned_text = None
         self.input_text = input_text
         self.important_terms = important_terms
-        self.tokenized_sentences = self.tokenize_words(self.input_text)
-        self.tokenized_words = [y for x in self.tokenized_sentences for y in x]
-        self.STOP_WORDS = StopWords().get_stop_words(self.tokenized_words, self.important_terms)
+        self.tokenize_sentences_lst = self.tokenize_sentence(self.input_text)
+        self.tokenized_words_lst = self.tokenize_words(self.tokenize_sentences_lst)
+        self.words_lst = [y for x in self.tokenized_words_lst for y in x]
+        self.STOP_WORDS = StopWords().get_stop_words(self.words_lst, self.important_terms)
 
     def remove_spaces(self, text):
         text = text.strip()
@@ -25,6 +28,9 @@ class PreprocessText:
 
     def lower(self, text):
         return [i.lower() for i in text]
+
+    def tokenize_sentence(self, abstracts):
+        return [s for t in abstracts for s in sent_tokenize(t)]
 
     def tokenize_words(self, sentences):
         return [word_tokenize(t) for t in sentences]
@@ -51,7 +57,7 @@ class PreprocessText:
 
     def clean(self, text):
         text = self.lower(text)
-        clean_tokens = self.remove_punctuation(self.tokenized_sentences)
+        clean_tokens = self.remove_punctuation(self.tokenized_words_lst)
         clean_tokens = self.remove_digits(clean_tokens)
         clean_tokens = self.remove_stop_words(clean_tokens)
         self.cleaned_tokens = clean_tokens
