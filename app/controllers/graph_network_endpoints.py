@@ -32,9 +32,10 @@ EMPTY_GRAPH = "empty_graph"
 
 @api.route('/', methods=['POST'])
 def graph_network():
-    dataset_dir = path.abspath(path.join(__file__ ,"../../data/datasets"))
+    dataset_dir = "data/datasets"
 
     dataset = request.form['dataset']
+    print(path.join(dataset_dir, dataset))
     # transponse_flag=int(request.form['transponse_flag'])
     transponse_flag = 0
     root_node = request.form['root_node']
