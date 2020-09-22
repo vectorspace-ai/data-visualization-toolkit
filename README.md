@@ -5,7 +5,7 @@
 We assume that you have `git` and `virtualenv` and `virtualenvwrapper` installed.
 
     # Clone the code repository 
-    git clone 
+    git clone https://github.com/vectorspace-ai/data-visualization-toolkit.git
 
     # Create the 'dataset_toolkit_env' virtual environment
     virtualenv dataset_toolkit_env
