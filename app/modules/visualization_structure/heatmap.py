@@ -1,71 +1,27 @@
+from app.modules.datasets.get_labels import *
+import pandas as pd
+
+
 class HeatMap:
     """
     Heatmap visualization class
     """
-    def __init__(self):
-        ...
 
-    def create_data(self, corr_matrix):
-        keywords = corr_matrix.index.tolist()
-        contexts = corr_matrix.columns.tolist()
+    def get_rows_columns(self, path):
+        columns = get_columns(path)
+        rows = get_rows(path)
+        return columns, rows
+
+    def create_body(self, path):
         data = []
-        for i in keywords:
-            cell = {}
-            cell['keyword'] = i
-            for j in contexts:
-                cell[j] = round(corr_matrix[j][i], 2)
-            data.append(cell)
+        corr_matrix = pd.read_csv(path)
+        for r_ind, values in enumerate(corr_matrix.values.tolist()):
+            for c_ind, v in enumerate(values[1:]):
+                data.append([c_ind, r_ind, round(v, 2)])
         return data
 
-    def create_body(self, corr_matrix):
-        data = self.create_data(corr_matrix)
-        contexts = corr_matrix.columns.tolist()
-        body = {
-            "width": 800,
-            "height": 800,
-            "data": data,
-            "keys": contexts,
-            "indexBy": "keyword",
-            "margin": {
-                "top": 100,
-                "right": 60,
-                "bottom": 30,
-                "left": 60
-            },
-            "minValue": "auto",
-            "maxValue": "auto",
-            "forceSquare": True,
-            "sizeVariation": 0,
-            "padding": 0,
-            "colors": "nivo",
-            "axisTop": {
-                "orient": "top",
-                "tickSize": 5,
-                "tickPadding": 5,
-                "tickRotation": -55,
-                "legend": "",
-                "legendOffset": 36
-            },
-            "axisRight": None,
-            "axisBottom": None,
-            "axisLeft": {
-                "orient": "left",
-                "tickSize": 5,
-                "tickPadding": 5,
-                "tickRotation": 0,
-                "legend": "keyword",
-                "legendPosition": "middle",
-                "legendOffset": -40
-            },
-            "enableGridX": False,
-            "enableGridY": True,
-            "cellShape": "rect",
-            "cellOpacity": 1,
-            "cellBorderWidth": 0
-        }
-        return body
-
-    def get_visualization_request(self, corr_matrix):
-        return self.create_body(corr_matrix)
+    def get_visualization_request(self, path):
+        rows, columns = self.get_rows_columns(path)
+        return rows, columns, self.create_body(path)
 
 

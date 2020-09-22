@@ -33,9 +33,7 @@ EMPTY_GRAPH = "empty_graph"
 @api.route('/', methods=['POST'])
 def graph_network():
     dataset_dir = "data/datasets"
-
     dataset = request.form['dataset']
-    print(path.join(dataset_dir, dataset))
     # transponse_flag=int(request.form['transponse_flag'])
     transponse_flag = 0
     root_node = request.form['root_node']
@@ -43,7 +41,6 @@ def graph_network():
     branches = int(request.form['branches'])
     nodes = int(request.form['nodes'])
     min_score = float(request.form['min_score'])
-
     graph_network = GraphNetwork(root_node, max_depth, branches, nodes, min_score, transponse_flag,
                                  path.join(dataset_dir, dataset))
     graph = graph_network.pipeline()
