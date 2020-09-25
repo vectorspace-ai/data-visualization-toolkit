@@ -107,16 +107,13 @@ class CorrelationMatrix:
         # don't know if you need to call df.to_csv() too
         return pd.DataFrame(self.matrix, index=self.rows, columns=self.columns)
 
-
-    def save_dataset(self, path_to_dataset, dataset_filename):
+    def save_dataset(self, path_to_dataset, rows_name, columns_name):
         df = self.get_dataset()
-        filename_creted_name = self.distance + "_" + self.model.model_type[0] + "_" \
-                               + dataset_filename + "_context_" + "_".join(self.context_control) \
-                               + "_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
-        self.path_to_dataset = join(path_to_dataset, filename_creted_name)
-        df.to_csv(self.path_to_dataset)
-        #
-        #
+        vxv_wallet = '0x923fcaB5b510C16c656312cFd503B83Fb1A0b2F4'
+        filename_created_name = f'heatmap-realtime-{rows_name}-by-{columns_name}-{vxv_wallet}-matrix.csv'
+        path_to_dataset = join(path_to_dataset, filename_created_name)
+        df.to_csv(path_to_dataset)
+        return path_to_dataset
         # This is how I think it would be nice to name the file with distance caluclation method, name of datas source, the contexts specified and time + .csv at the end of course
 
     def get_keyvalues(self):
