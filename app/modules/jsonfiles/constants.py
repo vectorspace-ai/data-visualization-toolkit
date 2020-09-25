@@ -6,8 +6,8 @@ dataset_path = "data/datasets"
 
 
 class DatasetFiles(Enum):
-    STOCKS500SYMBOLS = "stocks500symbols.csv"
-    STOCKS_TO_DRUGS = "500stocksto100drugcompounds.csv"
+    STOCKS500SYMBOLS = "heatmap-realtime-stocks-by-stocks-0x923fcaB5b510C16c656312cFd503B83Fb1A0b2F4-matrix.csv"
+    STOCKS_TO_DRUGS = "heatmap-realtime-stocks-by-drugs-0x923fcaB5b510C16c656312cFd503B83Fb1A0b2F4-matrix.csv"
 
 
 DATASET = {
