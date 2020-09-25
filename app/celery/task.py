@@ -5,7 +5,7 @@ from app.modules.models.training_script import fine_tuning_preprocess
 
 @task
 def pubmed_crawler():
-    filepath = "data/train_datasource/pubmed_data.csv"
+    filepath = "data/train_datasource/pubmed.csv"
     crawler = PubMedCrawler(filepath)
     crawler.crawl()
     fine_tuning_preprocess(filepath)

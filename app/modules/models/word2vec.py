@@ -20,8 +20,7 @@ class Word2Vec(BaseModel):
                          embeddings_shape=embeddings_shape, **kwargs)
 
     def load_model(self):
-        self.loaded_model = KeyedVectors.load_word2vec_format(join(self.path_to_model, self.model_filename),
-                                                              binary=True)
+        self.loaded_model = Word2Vec_gensim.load(join(self.path_to_model, self.model_filename))
 
     def get_vector(self, word):
         try:
