@@ -19,7 +19,7 @@ We assume that you have `git` and `virtualenv` and `virtualenvwrapper` installed
 ## Updating data directory
 
     # Download data directory 
-    https://drive.google.com/drive/folders/1QPBFd1LbEgJBzULNorwIHDMZ4bsk1R0i?usp=sharing
+    [data](https://drive.google.com/drive/folders/1QPBFd1LbEgJBzULNorwIHDMZ4bsk1R0i?usp=sharing)
     
     # Locate data directory in main directory
     
