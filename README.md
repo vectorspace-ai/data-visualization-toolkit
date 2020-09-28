@@ -15,7 +15,14 @@ We assume that you have `git` and `virtualenv` and `virtualenvwrapper` installed
 
     # Install required Python packages
     pip install -r requirements.txt
+    
+## Updating data directory
 
+    # Download data directory 
+    https://drive.google.com/drive/folders/1QPBFd1LbEgJBzULNorwIHDMZ4bsk1R0i?usp=sharing
+    
+    # Locate data directory in main directory
+    
 ## Running the app
     # Export 
     export FLASK_APP=app/application.py
