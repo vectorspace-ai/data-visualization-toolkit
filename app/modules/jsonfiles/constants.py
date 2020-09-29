@@ -11,6 +11,6 @@ class DatasetFiles(Enum):
 
 
 DATASET = {
-    DatasetFiles.STOCKS500SYMBOLS.value: get_unique_symbols(join(dataset_path, DatasetFiles.STOCKS500SYMBOLS.value)),
-    DatasetFiles.STOCKS_TO_DRUGS.value: get_unique_symbols(join(dataset_path, DatasetFiles.STOCKS_TO_DRUGS.value))
+    DatasetFiles.STOCKS500SYMBOLS.value: get_rows(join(dataset_path, DatasetFiles.STOCKS500SYMBOLS.value)),
+    DatasetFiles.STOCKS_TO_DRUGS.value: get_rows(join(dataset_path, DatasetFiles.STOCKS_TO_DRUGS.value))
 }
