@@ -1,27 +1,19 @@
 import pandas as pd 
 import json
+import os
+def set_labels_from_file():
+	dataset_path = "data/datasets/"
 
-def set_labels_from_file(dataframe):
-	rows=tuple(dataframe.index)
-	columns=tuple(dataframe.columns)
+	file_list = [i for i in os.listdir(dataset_path) if ".csv" in i]
+	json_str={}
+	for i in file_list:
+		dataframe = pd.read_csv(os.path.join(dataset_path, i), index_col = 0)
+		rows = tuple(dataframe.index)
+		columns = tuple(dataframe.columns)
 
-	json_str={"rows": rows, "columns": columns}
-	header="DATASET = "
-	with open("constants.py", 'w') as f:
-		f.write(header)
-		f.write(json.dumps(json_str, indent=2))
+		json_str[i] = rows
 
-
-
-def set_labels_from_file(dataframe, dataframe_filename):
-	rows=tuple(dataframe.index)
-	columns=tuple(dataframe.columns)
-
-	json_str={dataframe_filename: rows}
-	header="DATASET = "
-	with open("constants.py", 'w') as f:
-		f.write(header)
-		f.write(json.dumps(json_str, indent=2))
+	return json.dumps(json_str, indent = 2)
 
 
 
@@ -37,5 +29,5 @@ FUTURE
 -ignore filename and make the keys "ROWS" or "COLUMNS" as the matrix will be loaded either way
 -make it handle REAL JSON instead of saving to a constants.py file"""
 
-if __name__ == '__main__':
-	set_labels(pd.read_csv("test.csv", index_col=0), "test.csv")
+"""if __name__ == '__main__':
+	set_labels(pd.read_csv("test.csv", index_col=0), "test.csv")"""
