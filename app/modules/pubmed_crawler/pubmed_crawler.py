@@ -75,9 +75,8 @@ class PubMedCrawler:
                 except (KeyboardInterrupt, SystemExit):
                     raise
                 except urllib.error.HTTPError:
-                    print(HTTP_ERROR)
-                except:
-                    print("oh shit what now")
+                    print(HTTP_ERROR, file=sys.stderr)
+
                 article = str(response.read().decode("utf-8"))
                 article = article.split('\n\n')
                 if len(article) > 5:
