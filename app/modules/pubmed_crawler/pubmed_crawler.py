@@ -64,7 +64,7 @@ class PubMedCrawler:
         response = urllib.request.urlopen(url_pmids)
         data = json.loads(response.read())
         pmid_list = [i for i in data["esearchresult"]["idlist"] if i not in self.crawled_pmids]
-        if len(pmid_list) is not 0:
+        if len(pmid_list) != 0:
             start = time.time()
             print("["+stime()+"]: New articles published: ", len(pmid_list))
             print("Starting crawl in 5 seconds...")
@@ -83,7 +83,7 @@ class PubMedCrawler:
 
                     abstract = "\n".join([i for i in article[3:] if
                                           AUTHOR_INFO not in i and DOI not in i and COPYRIGHT not in i and AT not in i and EMAIL not in i and PMID_TAG not in i and PMCID not in i])
-                    if len(abstract) is not 0:
+                    if len(abstract) != 0:
                         self.crawled_pmids.append(pmid)
                         df = pd.DataFrame([[pmid, abstract]], columns=self.columns)
                         df.to_csv(dataframe_today_path, mode='a', index=False, header=False)
