@@ -2,8 +2,8 @@ from app.modules.preprocess.preprocess import PreprocessText
 from app.modules.models.word2vec import Word2Vec
 import pandas as pd
 
-MOCK_PATH = 'data/models/word2vec/'
-MOCK_MODEL_NAME = 'base_model.model'
+MOCK_PATH = 'data/models/word2vec_pubmed/'
+MOCK_MODEL_NAME = 'general_pubmed.model'
 MOCK_EMBEDDINGS_SIZE = 300
 
 
@@ -26,7 +26,7 @@ def fine_tuning_preprocess(filepath):
     columns = []
     datasource = []
     abstracts = read_datasource(filepath)
-    rows = get_important_symbols('data/rows/pharma_symbols.txt')
+    rows = get_important_symbols('data/rows/stocks.txt')
     terms = columns + rows
     preprocess = PreprocessText(important_terms=terms, input_text=abstracts)
     preprocess.clean(abstracts)

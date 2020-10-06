@@ -34,4 +34,4 @@ class Word2Vec(BaseModel):
         model = Word2Vec_gensim.load(join(self.path_to_model, self.model_filename))
         model.build_vocab(cleaned_corpus, update=True)
         model.train(cleaned_corpus, total_examples=len(cleaned_corpus), epochs=30, report_delay=1)
-        model.save('data/models/fine_tuned.model')
+        model.save('data/models/word2vec_pubmed/general_pubmed.model')
