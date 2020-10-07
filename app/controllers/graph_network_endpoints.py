@@ -33,10 +33,14 @@ EMPTY_GRAPH = "empty_graph"
 @api.route('/', methods=['POST'])
 def graph_network():
     dataset_dir = "data/datasets"
+    transponse_flag = 0
+    labels = request.form["labels"]
+    if labels == "columns":
+        transponse_flag = 1
 
+    print(request.form["labels"])
     dataset = request.form['dataset']
     # transponse_flag=int(request.form['transponse_flag'])
-    transponse_flag = 0
     root_node = request.form['root_node']
     max_depth = int(request.form['max_depth'])
     branches = int(request.form['branches'])
@@ -53,5 +57,4 @@ def graph_network():
     else:
         return render_template('result_graph.html', data=graph["data"], root_node=root_node, depth=graph["max_depth"],
                                branches=branches, found_nodes=graph["total_nodes"], min_score=min_score,
-                               file_name=dataset,
-                               time=graph["elapsed_time"])
+                               file_name=dataset, labels=labels, time=graph["elapsed_time"])

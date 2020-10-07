@@ -3,7 +3,9 @@
 <div class="row" style="margin:50px 0">
 	<div class="col-md-12">
 		<form action="graph_network/" method="post">
-		<select style="height:50px" class=form-control id=dataset name="dataset">
+		<input type="radio" name="labels" id="rows" value="rows" > Rows<br>
+		<input type="radio" name="labels" id="columns" value="columns"> Columns<br>
+		<select style="height:50px" class=form-control id="dataset" name="dataset">
 		<option value="0"  selected style="display:none">Select a dataset</option>
 		</select>
 		<select style="height:50px" class="form-control" id="root_node" name="root_node">
@@ -39,7 +41,9 @@
 				<option value={{i}}>{{i}}</option>
 			{% endfor %} 
 		</select>
-		<input type="submit" name="submit" id="submit" disabled value="Visualize Dataset" style="margin-top:50px">
+		<br>
+		<br>
+		<input type="submit" disabled name="submit" id="submit" value="Visualize Dataset" style="margin-top:50px">
 		</form>
 	</div>
 </div>
@@ -47,36 +51,58 @@
 "use strict";
 const datasets = {{dataset | tojson }};
 let form = $('form');
-const dataset= $('select#dataset');
+let dataset = $('select#dataset');
+let labels = $('select#labels');
 let root_node = $('select#root_node');
-$('form').each(function() {
+
+/*$('form').each(function() {
+
 	this.reset();
-});
-$(window).bind("pageshow", function() {
+
+});*/
+
+$(window).bind("pageshow", () => {
 	form[0].reset();
+	$('#dataset').val(Object.keys(datasets)[0]);
 	$("#root_node").find("option").remove().end().append('<option value="0" selected style="display:none">Root Node</option>').val("0");
-	$('#dataset').one('change', function() {
-   	$('#submit').prop('disabled', false);
+	$('input[type=radio]').click( () => {
+   		$('#submit').prop('disabled', false);
 	});
 
 });
 
 
-for (var key in datasets) {
+for (let key in datasets) {
 	dataset.append($('<option/>', {'value': key, 'text': key}));
 }
+//$('#root_node').val(datasets[Object.keys(datasets)[0]]["rows"]);
 
-dataset.change(function(ev) {
-root_node.empty();
-root_node.append($('<option/>'));
 
-	let root_nodes = datasets[dataset.val()];
+$('#dataset').val(Object.keys(datasets)[0]);
 
-	for (var i in root_nodes) {
+const onChange = () => {
+	let labels;
+	if (document.getElementById("rows").checked) {
+  		labels = "rows"
+	}
+	else
+		labels = "columns"
+
+
+	root_node.empty();
+	root_node.append($('<option/>'));
+
+	let root_nodes = datasets[dataset.val()][labels];
+	for (let i in root_nodes) {
 		root_node.append($('<option/>', {'value': root_nodes[i], 'text': root_nodes[i]}));
 	}
 	$("#root_node").find("option:first").remove();
-});
+
+}
+onChange();
+document.getElementById("dataset").addEventListener("change", onChange);
+$('input[type=radio]').click(onChange);
+
 
 </script>
 

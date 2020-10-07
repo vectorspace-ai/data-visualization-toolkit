@@ -8,6 +8,7 @@
                 
                 <b>Dataset:</b> {{file_name}}<br>
         <b>Root node:</b> {{root_node}}<br>
+        <b>Root Node selected from:</b> {{labels}}<br>
         <b>Min Relationship Strength:</b> {{min_score}}<br>
         <b>Max Branch Depth:</b> {{max_depth}}<br>
         <b>Max Branches:</b> {{branches}}<br>
@@ -25,7 +26,7 @@ Highcharts.chart('container-2', {
         height: '100%'
     },
     title: {
-        text: 'NLU Relationship Network - Predicted Price Correlations'
+        text: 'NLU Relationship Network'
     },
     subtitle: {
         text: 'Type: Graph, Symbol: {{root_node | safe}}, Min Relationship Strength: {{min_score}} Branch Depth: {{depth}}, Max Branches: {{branches}}, Number of nodes: {{found_nodes}}'

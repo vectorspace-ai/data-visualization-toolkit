@@ -12,8 +12,11 @@ def set_labels_from_file():
         dataframe = pd.read_csv(os.path.join(dataset_path, i), index_col=0)
         rows = tuple(dataframe.index)
         columns = tuple(dataframe.columns)
+        json_str[i]={}
+        json_str[i]["columns"] = columns
+        json_str[i]["rows"] = rows
 
-        json_str[i] = rows
+
 
     return json.dumps(json_str, indent=2)
 

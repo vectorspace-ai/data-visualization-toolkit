@@ -132,7 +132,9 @@ class GraphNetwork:
 			self.t_data=self.n_data
 
 		else:
-			t_csv=self.zipper(csv.reader(t_dataset, delimiter=self.delim))
+			t_csv=csv.reader(t_dataset, delimiter=self.delim)
+			if self.transponse_flag==0:
+				t_csv=self.zipper(t_csv)
 			for row in list(t_csv)[1:]:
 				temp=row[0].strip(' ')
 				self.t_data[temp] = [float(x) for x in row[1:]]
@@ -156,13 +158,11 @@ class GraphNetwork:
 
 		#this is used for the while loop(subtracted by 1 because first level has already been covered above)
 		remainer_depth=self.max_depth-1
-		what_is_header=""
 
 		while remainer_depth>0 and len(self.result)<self.nodes:
 			if count%2==1:
 				self.data=self.n_data.copy()
 				self.headers=self.n_headers[:]
-				what_is_header="nominal"
 
 			else:
 				self.data=self.t_data.copy()

@@ -60,14 +60,12 @@ class PubMedCrawler:
         url_pmids = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=("' + self.url_string_startdate + '"%5BDate%20-%20Publication%5D%20%3A%20"' + url_string_today + '"%5BDate%20-%20Publication%5D)&retmode=json&retmax=1000000'
 
 
-        print("["+stime()+"]: Getting newly published articles...")
         response = urllib.request.urlopen(url_pmids)
         data = json.loads(response.read())
         pmid_list = [i for i in data["esearchresult"]["idlist"] if i not in self.crawled_pmids]
         if len(pmid_list) != 0:
             start = time.time()
             print("["+stime()+"]: New articles published: ", len(pmid_list))
-            print("Starting crawl in 5 seconds...")
             time.sleep(5)
             for pmid in pmid_list:
                 try:
@@ -89,10 +87,8 @@ class PubMedCrawler:
                         df.to_csv(dataframe_today_path, mode='a', index=False, header=False)
                         df_today = df_today.append({"name": pmid, "text": abstract}, ignore_index=True)
                         print("["+stime()+"]: Crawled abstact: ", pmid)
-                        print("Length: ", len(abstract))
             self.df = pd.concat([self.df, df_today], ignore_index=True)
             self.df.to_csv(self.dataframe_path, index=False)
-            print("Crawling finished.")
             print("Elapsed time: ", round(time.time() - start, 4))
 
         else:
