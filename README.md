@@ -1,34 +1,27 @@
 # Dataset Tookit:
 
-## Setting up a development environment
+## Running the app
 
 We assume that you have `git` and `virtualenv` and `virtualenvwrapper` installed.
 
     # Clone the code repository 
     git clone https://github.com/vectorspace-ai/data-visualization-toolkit.git
 
-    # Create the 'dataset_toolkit_env' virtual environment
-    virtualenv dataset_toolkit_env
-    
-    # Activate 'dataset_toolkit_env' virtual environment
-    source/bin/activate dataset_toolkit_env
+    # Run 'start.sh'
+    ./start.sh
 
-    # Install required Python packages
-    pip install -r requirements.txt
+    # If the browser does not open, open your browser of choice and go to
+    localhost:5000
     
 ## Updating data directory
+You can add custom datasets to the app. All you need to do is place them in the data directory. The app will parse them from there
 
-    # Download data directory 
- https://drive.google.com/uc?export=download&id=10DyFcaWG-W7cswO95QuqoxlpEHVPT36y
+    # If the local data directory is not already created, create it by
+    mkdir data
+    mkdir datasets
+
+    # Then extract the datasets inside the datasets folder
+    cp "*.csv" data/datasets/.
+
+
     
-    # Locate data directory in main directory
-    
-## Running the app
-    # Export 
-    export FLASK_APP=app/application.py
-    export PYTHONPATH=$PYTHONPATH:$PWD
-
-    # Start the Flask development web server
-    flask run
-
-Point your web browser to http://localhost:5000/
