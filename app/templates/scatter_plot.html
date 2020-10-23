@@ -1,0 +1,80 @@
+{% include 'front.html' %}
+                <h3>
+                Dataset Visualization Toolkit
+                </h3>
+                <h5>
+                Based on Known & Hidden Relationship Detection in Data using NLP/NLU (Natural Language Processing/Understanding)
+                </h5>
+
+
+{% include 'scatter_div.html' %}
+<script>
+series_val = [];
+
+    Object.keys({{coords_with_clusters | safe}}).forEach(function(key) {
+        series_val.push({'name': key, 'data':{{coords_with_clusters | safe}}[key]});
+});
+
+Highcharts.chart('container', {
+    chart: {
+        type: 'scatter',
+        zoomType: 'xy'
+    },
+    title: {
+        text: '{{dataname}}'
+    },
+    xAxis: {
+        title: {
+            enabled: true,
+            text: '{{row_name}}'
+        },
+        startOnTick: true,
+        endOnTick: true,
+        showLastLabel: true
+    },
+    yAxis: {
+        title: {
+            text: '{{col_name}}'
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 100,
+        y: 70,
+        floating: true,
+        backgroundColor: Highcharts.defaultOptions.chart.backgroundColor,
+        borderWidth: 1
+    },
+    plotOptions: {
+        scatter: {
+            marker: {
+                radius: 5,
+                states: {
+                    hover: {
+                        enabled: true,
+                        lineColor: 'rgb(100,100,100)'
+                    }
+                }
+            },
+            states: {
+                hover: {
+                    marker: {
+                        enabled: false
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<b>{series.name}</b><br>',
+                pointFormat: '{point.x} cm, {point.y} kg'
+            }
+        }
+    },
+    series:series_val
+});
+
+</script>
+{% include 'back_button.html' %}
+{% include 'back.html' %}
+
