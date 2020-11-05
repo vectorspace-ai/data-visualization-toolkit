@@ -19,14 +19,15 @@ class ClusterBuilder:
          """
         best_metric = -1
         best_clusters = []
-        for dist in distances.keys():
-            hdbscan_clustering = hdbscan.HDBSCAN(min_cluster_size=10, metric=dist, min_samples=5,
-                                                 allow_single_cluster=False)
-            clustered = hdbscan_clustering.fit_predict(matrix)
-            score = UnsupervisedMetrics.get_score(matrix, clustered)
-            if score > best_metric:
-                best_metric = score
-                best_clusters = clustered.copy()
+        dist = list(distances.keys())[0]
+
+        hdbscan_clustering = hdbscan.HDBSCAN(min_cluster_size=2, metric=dist, min_samples=5,
+                                             allow_single_cluster=False)
+        clustered = hdbscan_clustering.fit_predict(matrix)
+        # score = UnsupervisedMetrics().get_score(matrix, clustered)
+        # if score > best_metric:
+        #     best_metric = score
+        best_clusters = clustered.copy()
         return best_clusters
 
     def get_clusters(self, matrix):

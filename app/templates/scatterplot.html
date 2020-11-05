@@ -1,0 +1,32 @@
+{% include 'front.html' %}
+
+<div class="row" style="margin:50px 0">
+	<div class="col-md-12">
+		<form action="plot" method="POST">
+		<select style="height:50px" class=form-control id="dataset" name="dataset">
+		<option value="0"  selected style="display:none">Select a dataset</option>
+		</select>
+		<br>
+		<br>
+		<input type="submit" name="submit" id="submit" value="Visualize Dataset" style="margin-top:50px">
+		</form>
+	</div>
+</div>
+<script>
+"use strict";
+const datasets = {{dataset | tojson }};
+let form = $('form');
+let dataset = $('select#dataset');
+
+
+for (let key in datasets) {
+	dataset.append($('<option/>', {'value': key, 'text': key}));
+}
+//$('#root_node').val(datasets[Object.keys(datasets)[0]]["rows"]);
+
+
+$('#dataset').val(Object.keys(datasets)[0]);
+
+</script>
+{% include 'back_button.html' %}
+{% include 'back.html' %}
