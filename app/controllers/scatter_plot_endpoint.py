@@ -9,16 +9,16 @@ from app.modules.visualization_structure.scatterplot import ScatterPlot
 
 api = Blueprint(__name__, __name__, url_prefix='/scatter_plot')
 
-"""@api.route('/')
+@api.route('/')
 def graph_parameters():
     return render_template('scatterplot.html', dataset=json.loads(set_dataset()))
 
-@api.route('/plot', methods=['POST'])"""
-@api.route('/', methods=['GET'])
+#@api.route('/', methods=['GET'])
+@api.route('/plot', methods=['POST'])
 def heatmap():
     dataset_dir = "data/datasets"
-    #dataset = request.form["dataset"]
-    dataset = "heatmap-realtime-pharmaprices-by-dateprices-0x923fcaB5b510C16c656312cFd503B83Fb1A0b2F4-matrix.csv"
+    dataset = request.form["dataset"]
+    #dataset = "heatmap-realtime-pharmaprices-by-dateprices-0x923fcaB5b510C16c656312cFd503B83Fb1A0b2F4-matrix.csv"
     coords_with_clusters = ScatterPlot().get_visualization_request(path.join(dataset_dir, dataset))
     row_name = dataset.split('-')[2]
     col_name = dataset.split('-')[4]

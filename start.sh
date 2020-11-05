@@ -12,7 +12,7 @@ fi
 DATADIR=data
 if [ ! -d "$DATADIR" ]
 then
-	curl -L -o data.zip "https://drive.google.com/uc?export=download&id=13H6QkQ2_Rd4qesxgEsTcvr7FPW9CNrdu"
+	curl -L -o data.zip "https://drive.google.com/uc?export=download&id=1Gy5YhkD2RBPnHNbqONocLTYXw1likkfi"
 	unzip data.zip
 	rm -f data.zip
 fi
